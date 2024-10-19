@@ -1,0 +1,8 @@
+objectFiles = wordgame.o slist.o
+headerFiles = slist.h
+srcFiles = wordgame.c slist.c
+CC = gcc
+CFLAG = -c 
+wordgame: wordgame.o slist.o
+	$(CC) CFLAG 
+
