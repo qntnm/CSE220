@@ -1,5 +1,10 @@
 #include <stdio.h>
+#include "slist.c"
 #include <string.h>
+int guessCounter;
+char name[30];
+guessCounter = 0;
+slist gameLeaderBoard;
 
 // Function to check if a letter is in the word and reveal it in the guessedWord
 void checkLetterInWord(char *word, char *guessedWord, char letter) {
@@ -31,22 +36,28 @@ void resetGuessedWord(char *guessedWord, int length) {
 
 // Function to handle a full word guess from the user
 int handleWordGuess(char *word, char *input) {
+    guessCounter++;
     if (strcmp(word, input) == 0) {
         printf("You got it! %s\n", word);
+        printf("You made %d guesses.\n",guessCounter);
         return 1; // Word guessed correctly
     } else {
         return 0; // Incorrect full word guess
     }
+    
 }
 
 // Function to handle a letter guess
 void handleLetterGuess(char *word, char *guessedWord, char letter) {
+    guessCounter++;
     checkLetterInWord(word, guessedWord, letter);
 }
 
 // Function to start a new game round
 void startNewGame(char *word, char *guessedWord, int wordLength) {
     resetGuessedWord(guessedWord, wordLength);
+    guessCounter = 0;
+    memset(name, '\0', sizeof(name)); // resets name array
     printf("The word to guess has %d letters:\n", wordLength);
     displayGuessedWord(guessedWord);
 }
@@ -58,7 +69,7 @@ void promptUserGuess(char *input) {
 }
 
 // Main game loop function
-void gameLoop(char *word, int wordLength) {
+void playGuessingGame(char *word, int wordLength) {
     char guessedWord[wordLength + 1];  // Array to store the guessed letters
     char input[100];  // Buffer to store user's guess (letter or word)
 
@@ -98,6 +109,9 @@ void gameLoop(char *word, int wordLength) {
         // Check if the entire word has been guessed
         if (isWordGuessed(word, guessedWord)) {
             printf("You got it! %s\n", word);
+            printf("You made %d guesses.\n",guessCounter);
+            // insert name into list
+            // printlist
             // Prompt to continue or quit after the correct guess
             char choice;
             printf("Press 'q' to quit or any other key to continue: ");
@@ -108,10 +122,12 @@ void gameLoop(char *word, int wordLength) {
             } else {
                 // Restart the game with the same word
                 startNewGame(word, guessedWord, wordLength);
+                continue;
             }
         }
 
         displayGuessedWord(guessedWord);
+        
     }
 }
 
@@ -132,9 +148,13 @@ int main(int argc, char *argv[]) {
         printf("Bye Bye!\n");
         return 0;
     }
-
+    // Prompt for the player's name
+    printf("Please enter your name to start: ");
+    scanf(" %s", name);
     
-    gameLoop(word, wordLength);
+    
+    playGuessingGame(word, wordLength);
+    
 
     return 0;
 }
