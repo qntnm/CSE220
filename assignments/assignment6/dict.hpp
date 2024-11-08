@@ -15,6 +15,23 @@ template <typename K ,typename V> class Dict{
     
 
 };
+template <typename K, typename V>
+BinarySearchTree<K,V> bt;
+template <typename K, typename V>
+void Dict<K,V>::add(const K& key, const V& value){
+     bt<K,V>.insert(key,value);
+
+}
+
+template<typename K, typename V>
+V Dict<K, V>::operator[](const K& key)
+{
+    // search for a given key
+
+    return bt<K,V>.search(key);
+
+}
+
 
 
 #endif 
